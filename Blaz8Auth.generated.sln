@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "B8Auth1", "B8Auth1\B8Auth1.csproj", "{0D54D4B4-0561-4233-8D75-0D941202F9D6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "B8Auth2", "B8Auth2\B8Auth2.csproj", "{8BB9442B-1A73-4D46-BE5F-889922DF0072}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0D54D4B4-0561-4233-8D75-0D941202F9D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0D54D4B4-0561-4233-8D75-0D941202F9D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0D54D4B4-0561-4233-8D75-0D941202F9D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0D54D4B4-0561-4233-8D75-0D941202F9D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8BB9442B-1A73-4D46-BE5F-889922DF0072}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8BB9442B-1A73-4D46-BE5F-889922DF0072}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8BB9442B-1A73-4D46-BE5F-889922DF0072}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8BB9442B-1A73-4D46-BE5F-889922DF0072}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1FA42C14-8197-4525-A646-7E7C6886B487}
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,7 @@
+dotnet new blazor -int Server -au Individual -o B8Auth1
+
+dotnet new blazor -int Server -au None -o B8Auth2
+
+dotnet package add Microsoft.AspNetCore.Authentication
+
+dotnet add package Microsoft.AspNetCore.Authentication.MicrosoftAccount --version 8.0.8
