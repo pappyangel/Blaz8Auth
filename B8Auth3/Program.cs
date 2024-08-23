@@ -1,19 +1,11 @@
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using B8Auth1.Components;
-using B8Auth1.Components.Account;
-using B8Auth1.Data;
+using B8Auth3.Components;
+using B8Auth3.Components.Account;
+using B8Auth3.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
-var configBuilder = new ConfigurationBuilder()
-                         .AddJsonFile("appsettings.json", true, true)
-                         .AddJsonFile($"appsettings.Development.json", true, true)
-                         .AddEnvironmentVariables()
-                         .AddUserSecrets<Program>();
-
-IConfiguration configuration = configBuilder.Build();
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -24,29 +16,12 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
-
- builder.Services.AddAuthentication(
-    options =>
+builder.Services.AddAuthentication(options =>
     {
-        
         options.DefaultScheme = IdentityConstants.ApplicationScheme;
         options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-        
-    }
-)
-    .AddMicrosoftAccount(microsoftOptions =>
-        {
-            microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
-            microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
-        })
+    })
     .AddIdentityCookies();
-
-// builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
-// {
-//     microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
-//     microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
-// })
-// .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>

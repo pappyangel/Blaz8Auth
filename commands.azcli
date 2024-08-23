@@ -1,7 +1,15 @@
-dotnet new blazor -int Server -au Individual -o B8Auth1
+dotnet new blazor -int Server -au Individual -o B8Auth3
 
 dotnet new blazor -int Server -au None -o B8Auth2
 
 dotnet package add Microsoft.AspNetCore.Authentication
 
 dotnet add package Microsoft.AspNetCore.Authentication.MicrosoftAccount --version 8.0.8
+
+dotnet tool update -g linux-dev-certs
+dotnet linux-dev-certs install
+dotnet dev-certs https --trust
+
+dotnet tool install -g dotnet-ef
+dotnet ef migrations add PremiumUser
+dotnet ef database update

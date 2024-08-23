@@ -3,8 +3,6 @@ using Microsoft.AspNetCore.Authentication;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
-
 var configBuilder = new ConfigurationBuilder()
                          .AddJsonFile("appsettings.json", true, true)
                          .AddJsonFile($"appsettings.Development.json", true, true)
