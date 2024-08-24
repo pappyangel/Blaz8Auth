@@ -12,4 +12,7 @@ dotnet dev-certs https --trust
 
 dotnet tool install -g dotnet-ef
 dotnet ef migrations add PremiumUser
+dotnet ef migrations add CleanDB
 dotnet ef database update
+
+sudo apt install sqlite3

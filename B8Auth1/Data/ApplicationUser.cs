@@ -5,6 +5,5 @@ namespace B8Auth1.Data;
 // Add profile data for application users by adding properties to the ApplicationUser class
 public class ApplicationUser : IdentityUser
 {
-    bool IsPremiumUser { get; set; } = false;
 }
 
