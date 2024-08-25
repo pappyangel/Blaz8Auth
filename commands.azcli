@@ -11,8 +11,13 @@ dotnet linux-dev-certs install
 dotnet dev-certs https --trust
 
 dotnet tool install -g dotnet-ef
-dotnet ef migrations add PremiumUser
+
+dotnet ef migrations add InitialAzureSQLDB2
+
 dotnet ef migrations add CleanDB
-dotnet ef database update
+dotnet ef database update 
+
 
 sudo apt install sqlite3
+
+dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.8
