@@ -1,7 +1,8 @@
 using B8Auth2.Components;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 
-var builder = WebApplication.CreateBuilder(args);
 
 var configBuilder = new ConfigurationBuilder()
                          .AddJsonFile("appsettings.json", true, true)
@@ -11,10 +12,18 @@ var configBuilder = new ConfigurationBuilder()
 
 IConfiguration configuration = configBuilder.Build();
 
-builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAuthentication(options =>
 {
-    microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
-    microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
+    options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = MicrosoftAccountDefaults.AuthenticationScheme;    
+})
+.AddCookie()
+.AddMicrosoftAccount(microsoftOptions =>
+{    
+    microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"]!;
+    microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"]!;
 });
 
 // Add services to the container.

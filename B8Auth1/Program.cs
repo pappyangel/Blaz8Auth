@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using B8Auth1.Components;
@@ -25,28 +27,17 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 
 
- builder.Services.AddAuthentication(
-    options =>
-    {
-        
-        options.DefaultScheme = IdentityConstants.ApplicationScheme;
-        options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
-        
-    }
-)
-    .AddMicrosoftAccount(microsoftOptions =>
-        {
-            microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
-            microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
-        })
-    .AddIdentityCookies();
-
-// builder.Services.AddAuthentication().AddMicrosoftAccount(microsoftOptions =>
-// {
-//     microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"];
-//     microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
-// })
-// .AddIdentityCookies();
+builder.Services.AddAuthentication(options =>
+{
+   options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+   options.DefaultChallengeScheme = MicrosoftAccountDefaults.AuthenticationScheme;
+})
+.AddCookie("Identity.External")
+.AddMicrosoftAccount(microsoftOptions =>
+{
+   microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"]!;
+   microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"]!;
+});
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
