@@ -21,3 +21,6 @@ dotnet ef database update
 sudo apt install sqlite3
 
 dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.8
+
+dotnet new sln -n B8Auth1
+dotnet sln B8Auth1.sln add B8Auth1/B8Auth1.csproj
