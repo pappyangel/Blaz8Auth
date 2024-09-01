@@ -1,6 +1,12 @@
 ﻿@page "/auth"
 
+@using B8Auth1.Components.Account
 @using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Identity
+@using B8Auth1.Data
+
+@inject UserManager<ApplicationUser> UserManager
+@inject IdentityUserAccessor UserAccessor
 
 @attribute [Authorize]
 
@@ -10,10 +16,29 @@
 
 <AuthorizeView>
     Hello @context.User.Identity?.Name!    
-    @* User Id: @context.User.Identity?.Id  *@
+    <br>
+
+    User Id: @userid
+    <br>
+   Premium User: 
     
 </AuthorizeView>
 
 @code {
+    private ApplicationUser user = default!;
+    private string? userid;
+
+   [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+     protected override async Task OnInitializedAsync()
+    {
+        user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+        userid = await UserManager.GetUserIdAsync(user);
     
+
+    
+    }
+
+
+
 }
