@@ -16,6 +16,10 @@ dotnet ef migrations add InitialAzureSQLDB2
 
 dotnet ef migrations add CleanDB
 dotnet ef database update 
+dotnet ef migrations add AddApplicationUsers5 --output-dir Data/Migrations
+
+dotnet ef dbcontext list
+
 
 
 sudo apt install sqlite3
