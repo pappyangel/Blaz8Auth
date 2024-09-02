@@ -1,0 +1,23 @@
+﻿@page "/premium"
+
+@* @using B8Auth1.Components.Account *@
+@using Microsoft.AspNetCore.Authorization
+@* @using Microsoft.AspNetCore.Identity *@
+@* @using B8Auth1.Data *@
+
+@* @inject UserManager<ApplicationUser> UserManager *@
+@* @inject IdentityUserAccessor UserAccessor *@
+
+@attribute [Authorize(Policy ="MustBePremiumUser") ]
+
+<PageTitle>Premium</PageTitle>
+
+<h1>You are Premium User</h1>
+
+<AuthorizeView>
+    Hello Premium User    
+</AuthorizeView>
+
+@code {
+    
+}

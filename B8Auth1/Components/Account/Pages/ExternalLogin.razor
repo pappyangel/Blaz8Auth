@@ -15,6 +15,7 @@
 @inject NavigationManager NavigationManager
 @inject IdentityRedirectManager RedirectManager
 @inject ILogger<ExternalLogin> Logger
+@inject IdentityUserAccessor UserAccessor
 
 <PageTitle>Register</PageTitle>
 
@@ -111,6 +112,20 @@
                 "{Name} logged in with {LoginProvider} provider.",
                 externalLoginInfo.Principal.Identity?.Name,
                 externalLoginInfo.LoginProvider);
+
+            // custom claim process - start
+            ApplicationUser user = default!;
+            user = await UserAccessor.GetRequiredUserAsync(HttpContext);
+            if (user.IsPremium)
+            {
+                var claims = new List<Claim>
+                {
+                    new Claim("PremiumUser", "true")
+                };
+                await UserManager.AddClaimsAsync(user, claims);
+            }           
+            // custom claim process - end
+
             RedirectManager.RedirectTo(ReturnUrl);
         }
         else if (result.IsLockedOut)

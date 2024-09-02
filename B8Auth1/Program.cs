@@ -53,6 +53,12 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("MustBePremiumUser",
+    policy => policy.RequireClaim("IsPremium", "true"));
+});  //PremiumUser or User is Premium
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -72,6 +78,9 @@ else
 
 app.UseStaticFiles();
 app.UseAntiforgery();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
