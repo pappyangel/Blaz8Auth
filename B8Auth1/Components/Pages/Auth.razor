@@ -4,6 +4,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using B8Auth1.Data
+@using System.Security.Claims
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IdentityUserAccessor UserAccessor
@@ -31,6 +32,7 @@
 @code {
     private ApplicationUser user = default!;
     private string? userid;
+    private IList<Claim> userClaims;
     private bool premiumUser = false;
 
     [CascadingParameter]
@@ -39,6 +41,7 @@
     {
         user = await UserAccessor.GetRequiredUserAsync(HttpContext);
         userid = await UserManager.GetUserIdAsync(user);
+        userClaims = await UserManager.GetClaimsAsync(user);
         premiumUser = user.IsPremium;
 
     }

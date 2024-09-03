@@ -114,7 +114,7 @@
                 externalLoginInfo.LoginProvider);
 
             // custom claim process - start
-            ApplicationUser user = default!;
+            @* ApplicationUser user = default!;
             user = await UserAccessor.GetRequiredUserAsync(HttpContext);
             if (user.IsPremium)
             {
@@ -123,7 +123,7 @@
                     new Claim("PremiumUser", "true")
                 };
                 await UserManager.AddClaimsAsync(user, claims);
-            }           
+            }            *@
             // custom claim process - end
 
             RedirectManager.RedirectTo(ReturnUrl);
