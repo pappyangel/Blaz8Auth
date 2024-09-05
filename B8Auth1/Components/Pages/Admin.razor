@@ -1,0 +1,44 @@
+@page "/admin"
+@using B8Auth1.Data
+@using Microsoft.AspNetCore.Identity
+@rendermode InteractiveServer
+@inject UserManager<ApplicationUser> UserManager
+
+<h3>Admin - User List</h3>
+
+@if (users == null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>User ID</th>
+                <th>Username</th>
+                <th>Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in users)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private IQueryable<ApplicationUser> users;
+
+    protected override void OnInitialized()
+    {
+        users =  UserManager.Users;
+        
+    }
+}
