@@ -32,7 +32,7 @@
 @code {
     private ApplicationUser user = default!;
     private string? userid;
-    private IList<Claim> userClaims;
+    private IList<Claim> userClaims = default!;
     private bool premiumUser = false;
 
     [CascadingParameter]

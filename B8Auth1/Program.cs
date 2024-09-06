@@ -56,7 +56,12 @@ builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSe
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("MustBePremiumUser",
-    policy => policy.RequireClaim("PremiumUser", "true"));
+    policy => policy.RequireClaim("IsPremiumUser", "true"));
+
+    options.AddPolicy("MustBeAdminUser",
+    policy => policy.RequireClaim("AdminUser", "true"));
+
+
 });  //PremiumUser or User is Premium
 
 var app = builder.Build();

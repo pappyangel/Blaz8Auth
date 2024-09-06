@@ -1,8 +1,12 @@
 @page "/admin"
 @using B8Auth1.Data
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
+@using System.Security.Claims
 @rendermode InteractiveServer
 @inject UserManager<ApplicationUser> UserManager
+
+@attribute [Authorize(Policy = "MustBeAdminUser")]
 
 <h3>Admin - User List</h3>
 
@@ -33,12 +37,54 @@ else
     </table>
 }
 
+<h3>Select a User</h3>
+<select @onchange="OnUserSelected">
+    <option value="" disabled selected>Select a user</option>
+    @foreach (var user in users)
+    {
+        <option value="@user.Id">@user.UserName</option>
+    }
+</select>
+
+@if (selectedUserClaims != null)
+{
+    <h3>User Claims</h3>
+    @foreach (var claim in selectedUserClaims)
+    {
+        <div>
+    <input type="checkbox" checked="@claim.Value" disabled />
+    <label>@claim.Type</label>
+</div>
+    }
+}
+
+
+
+
 @code {
-    private IQueryable<ApplicationUser> users;
+    private IQueryable<ApplicationUser> users = default!;
+    private IList<Claim>? selectedUserClaims;
 
     protected override void OnInitialized()
     {
         users =  UserManager.Users;
         
+    }
+
+    private async Task OnUserSelected(ChangeEventArgs e)
+    {
+        var userId = e.Value?.ToString();
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var user = await UserManager.FindByIdAsync(userId);
+            if (user != null)
+            {
+                selectedUserClaims = await UserManager.GetClaimsAsync(user);
+            }
+        }
+        else
+        {
+            selectedUserClaims = null;
+        }
     }
 }
