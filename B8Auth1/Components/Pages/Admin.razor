@@ -83,7 +83,7 @@ else
     private async Task OnUserSelected(string e)
     {        
         var userId = e;
-        @* if (!string.IsNullOrEmpty(userId))
+        if (!string.IsNullOrEmpty(userId))
         {
             var user = await UserManager.FindByIdAsync(userId);
             if (user != null)
@@ -94,6 +94,6 @@ else
         else
         {
             selectedUserClaims = null;
-        } *@
+        }
     }
 }

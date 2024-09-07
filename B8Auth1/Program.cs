@@ -16,6 +16,8 @@ var configBuilder = new ConfigurationBuilder()
                          .AddUserSecrets<Program>();
 
 IConfiguration configuration = configBuilder.Build();
+// var myClientSecret = configuration["MICROSOFT_CLIENT_SECRET"];
+// var myClientId = configuration["MICROSOFT_CLIENTID"];
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
@@ -36,12 +38,14 @@ builder.Services.AddAuthentication(options =>
 }) 
 .AddMicrosoftAccount(microsoftOptions =>
 {
-   microsoftOptions.ClientId = configuration["Authentication:Microsoft:ClientId"]!;
-   microsoftOptions.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"]!;
+
+   microsoftOptions.ClientId = configuration["MICROSOFT_CLIENTID"]!;
+   microsoftOptions.ClientSecret = configuration["MICROSOFT_CLIENT_SECRET"]!;
 })
 .AddIdentityCookies();
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = configuration["AUTHDB_CONNECTION_STRING"]! ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));    
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
