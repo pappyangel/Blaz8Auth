@@ -8,6 +8,7 @@
 
 @attribute [Authorize(Policy = "MustBeAdminUser")]
 
+
 <h3>Admin - User List</h3>
 
 @if (users == null)
@@ -38,13 +39,20 @@ else
 }
 
 <h3>Select a User</h3>
-<select @onchange="OnUserSelected">
+@* <InputSelect TValue="string" @onchange="OnUserSelected"> *@
+<InputSelect 
+    Value="@selectedUser2" 
+    ValueExpression="() => selectedUser2"
+    ValueChanged="(string s) => OnUserSelected(s)">
+    
     <option value="" disabled selected>Select a user</option>
-    @foreach (var user in users)
+
+    @foreach (var user in users!)
     {
         <option value="@user.Id">@user.UserName</option>
-    }
-</select>
+    } 
+
+</InputSelect>
 
 @if (selectedUserClaims != null)
 {
@@ -58,23 +66,24 @@ else
     }
 }
 
-
-
-
 @code {
-    private IQueryable<ApplicationUser> users = default!;
+    private IQueryable<ApplicationUser> users = default!;    
+    private ApplicationUser selectedUser = default!;
+    private string selectedUser2 = default!;
     private IList<Claim>? selectedUserClaims;
 
     protected override void OnInitialized()
     {
         users =  UserManager.Users;
+        @* usersList = UserManager.Users.ToList(); *@
         
     }
 
-    private async Task OnUserSelected(ChangeEventArgs e)
-    {
-        var userId = e.Value?.ToString();
-        if (!string.IsNullOrEmpty(userId))
+    @* private async Task OnUserSelected(ChangeEventArgs e) *@
+    private async Task OnUserSelected(string e)
+    {        
+        var userId = e;
+        @* if (!string.IsNullOrEmpty(userId))
         {
             var user = await UserManager.FindByIdAsync(userId);
             if (user != null)
@@ -85,6 +94,6 @@ else
         else
         {
             selectedUserClaims = null;
-        }
+        } *@
     }
 }
