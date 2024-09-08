@@ -9,7 +9,7 @@
 @attribute [Authorize(Policy = "MustBeAdminUser")]
 
 
-<h3>Admin - User List</h3>
+@* <h3>Admin - User List</h3>
 
 @if (users == null)
 {
@@ -36,7 +36,7 @@ else
             }
         </tbody>
     </table>
-}
+} *@
 
 <h3>Select a User</h3>
 @* <InputSelect TValue="string" @onchange="OnUserSelected"> *@
