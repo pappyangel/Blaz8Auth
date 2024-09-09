@@ -122,7 +122,10 @@
                 {
                     new Claim("PremiumUser", "true")
                 };
+                //await UserManager.ExternalLoginAddClaimsAsync(user, externalLoginInfo, claims);
                 await UserManager.AddClaimsAsync(user, claims);
+
+
             }            *@
             // custom claim process - end
 
