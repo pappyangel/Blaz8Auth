@@ -61,23 +61,56 @@ else
 
 </InputSelect>
 
-@if (selectedUserClaims != null)
+<br />
+<br />
+<br />
+
+
+@if (selectedUserClaimInfo == null)
 {
-    <h3>User Claims</h3>
-    @foreach (var claim in selectedUserClaims)
-    {
-        <div>
-    <input type="checkbox" checked="@claim.Value" disabled />
-    <label>@claim.Type</label>
-</div>
-    }
+    <p><em>Loading...</em></p>
 }
+else
+{
+    <div class="edit-form-box">
+    <h3>User Claims</h3>
+    <EditForm Model="@selectedUserClaimInfo">
+        <div>
+            <label>User Name:</label>
+            <span>@selectedUserClaimInfo.UserId</span>
+        </div>
+        <br />
+        <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsAdmin" />
+        <label>Is Admin</label>
+        <br />
+        <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsPremium" />
+        <label>Is Premium</label>
+        <br />
+        <br />
+
+        <button type="submit">Save</button>
+    </EditForm>
+</div>
+}
+
+@* @if (selectedUserClaims != null)
+{
+<h3>User Claims</h3>
+@foreach (var claim in selectedUserClaims)
+{
+<div>
+<input type="checkbox" checked="@claim.Value" disabled />
+<label>@claim.Type</label>
+</div>
+}
+} *@
 
 @code {
     private List<ApplicationUser> users = default!;
     private ApplicationUser selectedUser = default!;
     private string selectedUser2 = default!;
     private IList<Claim>? selectedUserClaims;
+    private UserClaimInfo selectedUserClaimInfo = new UserClaimInfo();
 
 
 
@@ -102,11 +135,24 @@ else
             if (user != null)
             {
                 selectedUserClaims = await UserManager.GetClaimsAsync(user);
+                if (selectedUserClaims != null)
+                {
+                    selectedUserClaimInfo.UserId = user.Id;
+                    selectedUserClaimInfo.IsAdmin = selectedUserClaims.Any(c => c.Type == "AdminUser" && c.Value == "true");
+                    selectedUserClaimInfo.IsPremium = selectedUserClaims.Any(c => c.Type == "IsPremiumUser" && c.Value == "true");
+                }
             }
         }
         else
         {
             selectedUserClaims = null;
         }
+    }
+
+    public class UserClaimInfo
+    {
+        public string UserId { get; set; } = default!;
+        public bool IsAdmin { get; set; }
+        public bool IsPremium { get; set; }
     }
 }

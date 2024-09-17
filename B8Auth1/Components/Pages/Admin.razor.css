@@ -1,0 +1,15 @@
+.edit-form-box {
+    border: 2px solid #ccc;
+    padding: 16px;
+    margin-top: 16px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    max-width: 600px;
+    /* Set a maximum width */
+    width: 100%;
+    /* Make it responsive */
+    margin-left: auto;
+    /* Center the box */
+    margin-right: auto;
+    /* Center the box */
+}
