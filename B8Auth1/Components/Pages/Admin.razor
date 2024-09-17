@@ -3,6 +3,7 @@
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
 @using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
 @rendermode InteractiveServer
 @inject UserManager<ApplicationUser> UserManager
 
@@ -13,44 +14,50 @@
 
 @if (users == null)
 {
-    <p>Loading...</p>
+<p>Loading...</p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>User ID</th>
-                <th>Username</th>
-                <th>Email</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var user in users)
-            {
-                <tr>
-                    <td>@user.Id</td>
-                    <td>@user.UserName</td>
-                    <td>@user.Email</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<table class="table">
+<thead>
+<tr>
+<th>User ID</th>
+<th>Username</th>
+<th>Email</th>
+</tr>
+</thead>
+<tbody>
+@foreach (var user in users)
+{
+<tr>
+<td>@user.Id</td>
+<td>@user.UserName</td>
+<td>@user.Email</td>
+</tr>
+}
+</tbody>
+</table>
 } *@
 
 <h3>Select a User</h3>
 @* <InputSelect TValue="string" @onchange="OnUserSelected"> *@
-<InputSelect 
-    Value="@selectedUser2" 
-    ValueExpression="() => selectedUser2"
+<InputSelect Value="@selectedUser2" ValueExpression="() => selectedUser2"
     ValueChanged="(string s) => OnUserSelected(s)">
-    
-    <option value="" disabled selected>Select a user</option>
 
-    @foreach (var user in users!)
+    @if (users == null)
     {
-        <option value="@user.Id">@user.UserName</option>
-    } 
+        <p><em>Loading...</em></p>
+    }
+    else
+    {
+
+        <option value="" disabled selected>Select a user</option>
+
+        @foreach (var user in users!)
+        {
+            <option value="@user.Id">@user.UserName</option>
+        }
+    }
 
 </InputSelect>
 
@@ -67,21 +74,27 @@ else
 }
 
 @code {
-    private IQueryable<ApplicationUser> users = default!;    
+    private List<ApplicationUser> users = default!;
     private ApplicationUser selectedUser = default!;
     private string selectedUser2 = default!;
     private IList<Claim>? selectedUserClaims;
 
-    protected override void OnInitialized()
+
+
+
+    protected override async Task OnInitializedAsync()
     {
-        users =  UserManager.Users;
+        @* users = UserManager.Users; *@
+        users = await UserManager.Users.ToListAsync();
+
+
         @* usersList = UserManager.Users.ToList(); *@
-        
+
     }
 
     @* private async Task OnUserSelected(ChangeEventArgs e) *@
     private async Task OnUserSelected(string e)
-    {        
+    {
         var userId = e;
         if (!string.IsNullOrEmpty(userId))
         {
