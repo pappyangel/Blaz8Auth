@@ -9,89 +9,54 @@
 
 @attribute [Authorize(Policy = "MustBeAdminUser")]
 
-
-@* <h3>Admin - User List</h3>
-
-@if (users == null)
-{
-<p>Loading...</p>
-}
-else
-{
-<table class="table">
-<thead>
-<tr>
-<th>User ID</th>
-<th>Username</th>
-<th>Email</th>
-</tr>
-</thead>
-<tbody>
-@foreach (var user in users)
-{
-<tr>
-<td>@user.Id</td>
-<td>@user.UserName</td>
-<td>@user.Email</td>
-</tr>
-}
-</tbody>
-</table>
-} *@
-
-<h3>Select a User</h3>
-@* <InputSelect TValue="string" @onchange="OnUserSelected"> *@
-<InputSelect Value="@selectedUser2" ValueExpression="() => selectedUser2"
-    ValueChanged="(string s) => OnUserSelected(s)">
-
-    @if (users == null)
-    {
-        <p><em>Loading...</em></p>
-    }
-    else
-    {
-
-        <option value="" disabled selected>Select a user</option>
-
-        @foreach (var user in users!)
+<div class="edit-form-box">
+    <h2>User Claims</h2>
+    <br />
+    <h4>Select a User</h4>
+    <InputSelect Value="@selectedUser" ValueExpression="() => selectedUser"
+        ValueChanged="(string s) => OnUserSelected(s)">
+        @if (users == null)
         {
-            <option value="@user.Id">@user.UserName</option>
+            <p><em>Loading...</em></p>
         }
-    }
-
-</InputSelect>
-
-<br />
-<br />
-<br />
-
-
+        else
+        {
+            <option value="" disabled selected>Select a user</option>
+            @foreach (var user in users!)
+            {
+                <option value="@user.Id">@user.UserName</option>
+            }
+        }
+    </InputSelect>
+    <br />
+    <br />
+    <br />
 @if (selectedUserClaimInfo == null)
 {
     <p><em>Loading...</em></p>
 }
 else
 {
-    <div class="edit-form-box">
-    <h3>User Claims</h3>
-    <EditForm Model="@selectedUserClaimInfo">
-        <div>
-            <label>User Name:</label>
-            <span>@selectedUserClaimInfo.UserId</span>
-        </div>
-        <br />
-        <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsAdmin" />
-        <label>Is Admin</label>
-        <br />
-        <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsPremium" />
-        <label>Is Premium</label>
-        <br />
-        <br />
-
-        <button type="submit">Save</button>
-    </EditForm>
-</div>
+    
+        
+        <EditForm Model="@selectedUserClaimInfo">
+            <div>
+                <label>User Name:</label>
+                <span>@selectedUserClaimInfo.UserName</span>
+            </div>
+            <br />
+            <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsAdmin" />
+            <label>Is Admin</label>
+            <br />
+            <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsPremium" />
+            <label>Is Premium</label>
+            <br />
+            <br />
+            <button type="submit">Save</button>
+        </EditForm>
+    
 }
+</div>
 
 @* @if (selectedUserClaims != null)
 {
@@ -106,9 +71,8 @@ else
 } *@
 
 @code {
-    private List<ApplicationUser> users = default!;
-    private ApplicationUser selectedUser = default!;
-    private string selectedUser2 = default!;
+    private List<ApplicationUser> users = default!;    
+    private string selectedUser = default!;
     private IList<Claim>? selectedUserClaims;
     private UserClaimInfo selectedUserClaimInfo = new UserClaimInfo();
 
@@ -138,6 +102,7 @@ else
                 if (selectedUserClaims != null)
                 {
                     selectedUserClaimInfo.UserId = user.Id;
+                    selectedUserClaimInfo.UserName = user.UserName!;
                     selectedUserClaimInfo.IsAdmin = selectedUserClaims.Any(c => c.Type == "AdminUser" && c.Value == "true");
                     selectedUserClaimInfo.IsPremium = selectedUserClaims.Any(c => c.Type == "IsPremiumUser" && c.Value == "true");
                 }
@@ -152,6 +117,7 @@ else
     public class UserClaimInfo
     {
         public string UserId { get; set; } = default!;
+        public string UserName { get; set; } = default!;
         public bool IsAdmin { get; set; }
         public bool IsPremium { get; set; }
     }
