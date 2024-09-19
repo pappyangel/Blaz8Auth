@@ -12,7 +12,7 @@
 <div class="edit-form-box">
     <h2>User Claims</h2>
     <br />
-    <h4>Select a User</h4>
+    
     <InputSelect Value="@selectedUser" ValueExpression="() => selectedUser"
         ValueChanged="(string s) => OnUserSelected(s)">
         @if (users == null)
@@ -28,7 +28,7 @@
             }
         }
     </InputSelect>
-    <br /> <br /> <br />
+    <br /> <br />
     @if (selectedUserClaimInfo == null)
     {
         <p><em>Loading...</em></p>
@@ -41,20 +41,19 @@
                     <span>@selectedUserClaimInfo.UserName</span>
                 </div>
                 <br />
-                <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsAdmin" />
+            <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsAdmin" disabled="@(!IsUserSelected)" />
                 <label>Is Admin</label>
                 <br />
-                <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsPremium" />
+                <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsPremium" disabled="@(!IsUserSelected)"/>
                 <label>Is Premium</label>
                 <br />
                 <br />
-                <button type="submit">Update Claims</button>
+                <button type="submit" disabled="@(!IsUserSelected)">Update Claims</button>
         </EditForm>    
     }
 </div>
 
 <ToastComp @ref="childtoast">
-
     <Body>
         <p>Claims Updated</p>
     </Body>
@@ -66,10 +65,12 @@
     private IList<Claim>? selectedUserClaims;
     private UserClaimInfo selectedUserClaimInfo = new UserClaimInfo();
     private ToastComp? childtoast { get; set; }
+    private bool IsUserSelected = false;
 
     protected override async Task OnInitializedAsync()
     {        
         users = await UserManager.Users.ToListAsync();
+        selectedUserClaimInfo.UserName = "No User Selected";
     }
     
     private async Task ProcessUserClaims()
@@ -99,6 +100,8 @@
                 childtoast?.ShowToast();
 
                 selectedUserClaimInfo = new UserClaimInfo();
+                selectedUserClaimInfo.UserName = "No User Selected";
+                IsUserSelected = false;                
                 
             }
         }
@@ -118,6 +121,7 @@
                     selectedUserClaimInfo.UserName = user.UserName!;
                     selectedUserClaimInfo.IsAdmin = selectedUserClaims.Any(c => c.Type == "AdminUser" && c.Value == "true");
                     selectedUserClaimInfo.IsPremium = selectedUserClaims.Any(c => c.Type == "IsPremiumUser" && c.Value == "true");
+                    IsUserSelected = true;
                 }
             }
         }
