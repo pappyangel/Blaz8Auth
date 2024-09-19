@@ -28,74 +28,85 @@
             }
         }
     </InputSelect>
-    <br />
-    <br />
-    <br />
-@if (selectedUserClaimInfo == null)
-{
-    <p><em>Loading...</em></p>
-}
-else
-{
-    
-        
-        <EditForm Model="@selectedUserClaimInfo">
-            <div>
-                <label>User Name:</label>
-                <span>@selectedUserClaimInfo.UserName</span>
-            </div>
-            <br />
-            <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsAdmin" />
-            <label>Is Admin</label>
-            <br />
-            <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsPremium" />
-            <label>Is Premium</label>
-            <br />
-            <br />
-            <button type="submit">Save</button>
-        </EditForm>
-    
-}
+    <br /> <br /> <br />
+    @if (selectedUserClaimInfo == null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else
+    {        
+        <EditForm Model="@selectedUserClaimInfo" OnValidSubmit="ProcessUserClaims">
+                <div>
+                    <label>User Name:</label>
+                    <span>@selectedUserClaimInfo.UserName</span>
+                </div>
+                <br />
+                <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsAdmin" />
+                <label>Is Admin</label>
+                <br />
+                <InputCheckbox @bind-Value="@selectedUserClaimInfo.IsPremium" />
+                <label>Is Premium</label>
+                <br />
+                <br />
+                <button type="submit">Update Claims</button>
+        </EditForm>    
+    }
 </div>
 
-@* @if (selectedUserClaims != null)
-{
-<h3>User Claims</h3>
-@foreach (var claim in selectedUserClaims)
-{
-<div>
-<input type="checkbox" checked="@claim.Value" disabled />
-<label>@claim.Type</label>
-</div>
-}
-} *@
+<ToastComp @ref="childtoast">
+
+    <Body>
+        <p>Claims Updated</p>
+    </Body>
+</ToastComp>
 
 @code {
     private List<ApplicationUser> users = default!;    
     private string selectedUser = default!;
     private IList<Claim>? selectedUserClaims;
     private UserClaimInfo selectedUserClaimInfo = new UserClaimInfo();
-
-
-
+    private ToastComp? childtoast { get; set; }
 
     protected override async Task OnInitializedAsync()
-    {
-        @* users = UserManager.Users; *@
+    {        
         users = await UserManager.Users.ToListAsync();
-
-
-        @* usersList = UserManager.Users.ToList(); *@
-
     }
-
-    @* private async Task OnUserSelected(ChangeEventArgs e) *@
+    
+    private async Task ProcessUserClaims()
+    {
+        var userId = selectedUserClaimInfo.UserId;
+        if (!string.IsNullOrEmpty(userId))
+        {
+            var user = await UserManager.FindByIdAsync(userId);            
+            if (user != null)
+            {
+                if (selectedUserClaimInfo.IsAdmin)
+                {
+                    await UserManager.AddClaimAsync(user, new Claim("AdminUser", "true"));                    
+                }
+                else 
+                {
+                    await UserManager.RemoveClaimAsync(user, new Claim("AdminUser", "true"));
+                }
+                if (selectedUserClaimInfo.IsPremium)
+                {
+                    await UserManager.AddClaimAsync(user, new Claim("IsPremiumUser", "true"));                    
+                }
+                else 
+                {
+                    await UserManager.RemoveClaimAsync(user, new Claim("IsPremiumUser", "true"));
+                }
+                childtoast?.ShowToast();
+                
+            }
+        }
+    }
     private async Task OnUserSelected(string e)
     {
         var userId = e;
         if (!string.IsNullOrEmpty(userId))
         {
-            var user = await UserManager.FindByIdAsync(userId);
+            var user = await UserManager.FindByIdAsync(userId);            
             if (user != null)
             {
                 selectedUserClaims = await UserManager.GetClaimsAsync(user);

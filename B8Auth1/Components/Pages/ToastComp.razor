@@ -1,0 +1,42 @@
+@rendermode InteractiveServer
+@using System
+@using System.Threading
+
+@if (showMyToast)
+{
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="liveToast" class="toast show" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+            <img src="/favicon.png" class="rounded me-2" alt="...">
+            <strong class="me-auto">Notice</strong>
+            <small>4 secs ago</small>
+            <button type="button" class="btn-close" @onclick="CloseToast" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+        <div class="toast-body">
+            @Body
+        </div>
+    </div>
+</div>
+}
+
+@code {
+
+    [Parameter]
+    public RenderFragment? Body { get; set; }
+    private bool showMyToast = false;
+    private Timer? myTimer;
+    public void ShowToast()
+    {
+        showMyToast = true;
+        @* InvokeAsync(StateHasChanged); *@
+        myTimer = new Timer(CloseToast, null, 3000, Timeout.Infinite);
+    }
+    private void CloseToast(object? state)
+    {
+        showMyToast = false;
+        InvokeAsync(StateHasChanged);
+        myTimer?.Dispose();
+    }
+
+}
