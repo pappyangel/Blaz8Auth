@@ -97,6 +97,8 @@
                     await UserManager.RemoveClaimAsync(user, new Claim("IsPremiumUser", "true"));
                 }
                 childtoast?.ShowToast();
+
+                selectedUserClaimInfo = new UserClaimInfo();
                 
             }
         }
