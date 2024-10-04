@@ -1,4 +1,4 @@
-dotnet new blazor -int Server -au Individual -o B8Auth3
+dotnet new blazor -int Server -au Individual -o B9Auth1
 
 dotnet new blazor -int Server -au None -o B8Auth2
 
