@@ -32,3 +32,22 @@ dotnet add package Microsoft.EntityFrameworkCore.SqlServer --version 8.0.8
 
 dotnet new sln -n B8Auth1
 dotnet sln B8Auth1.sln add B8Auth1/B8Auth1.csproj
+
+## more bash az- from ApiOne
+# install Azure CLI & common commands
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+# MSFTJim-FY25-Dev-AAD - 33824df8-959e-49c3-9d78-a56a9e310102
+az login --tenant 33824df8-959e-49c3-9d78-a56a9e310102
+az account list --output table
+# MSFTJim-FY25-Dev-Sub - 94b9572a-bee4-436c-8837-c5dbb982e8b0
+az account set --subscription "MSFTJim-FY25-Dev-Sub"
+az account get-access-token --resource https://vault.azure.net
+# If you receive an error, check that the right version of Azure CLI is correctly installed.
+az ad signed-in-user show
+
+AppServiceSMI=$(az sql server show --resource-group "rg-DataServices" --name "jfv-sql" --query identity.principalId)
+echo $AppServiceSMI 
+
+dog='Cosmo'
+echo $dog
