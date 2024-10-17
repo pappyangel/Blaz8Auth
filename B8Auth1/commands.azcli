@@ -1,3 +1,7 @@
+curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
+
+
+## from earier wip.
 dotnet new blazor -int Server -au Individual -o B9Auth1
 
 dotnet new blazor -int Server -au None -o B8Auth2
@@ -13,14 +17,6 @@ dotnet dev-certs https --trust
 dotnet tool install -g dotnet-ef
 
 dotnet ef migrations add InitialAzureSQLDB2
-
-    # need public on these fields - properties
-    # public class ApplicationUser : IdentityUser
-    # {
-    #     public bool IsPremium { get; set; }
-    #     public bool IsAdmin { get; set; }
-    # }
-
 
 dotnet ef migrations add CleanDB
 dotnet ef database update 
