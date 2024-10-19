@@ -1,0 +1,12 @@
+{
+    "image":"mcr.microsoft.com/devcontainers/universal:2",
+    "secrets": {
+        "DOG": {
+        "description": "This is the description of a person secret.",
+        "documentationUrl": "https://example.com/link/to/info"
+            }  
+    }
+
+
+
+}

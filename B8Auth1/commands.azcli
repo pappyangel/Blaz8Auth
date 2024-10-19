@@ -51,3 +51,5 @@ echo $AppServiceSMI
 
 dog='Cosmo'
 echo $dog
+
+echo $AUTHDB_CONNECTION_STRING
