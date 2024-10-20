@@ -1,5 +1,4 @@
 ﻿@page "/auth"
-
 @using B8Auth1.Components.Account
 @using Microsoft.AspNetCore.Authorization
 @using Microsoft.AspNetCore.Identity
@@ -13,20 +12,37 @@
 
 <PageTitle>Auth</PageTitle>
 
-<h1>You are authenticated</h1>
+@* <h1>You are authenticated</h1>
+<br />
+<br /> *@
 
 <AuthorizeView>
-    Hello @context.User.Identity?.Name!    
-    <br>
-    <br>
-    <p>
-    Claims:
-    <br>
-    User Id: @userid        
-    <br>
-    Premium User: @premiumUser
-    </p>
-    
+    <Authorized>        
+        <h3>Welcome, @context.User.Identity!.Name</h3>        
+        You are authenticated
+        <br />
+        User Id: @userid
+        <br />        
+        Premium User Attribute: @premiumUser
+        <br />
+        Admin User Attribute: @adminUser
+        <br />
+        <br />
+        @if (userClaims != null)
+        {
+            <h5>Your Claims:</h5>
+            <ul>
+            @foreach (var claim in userClaims)
+                {
+                    <li>@claim.Type: @claim.Value</li>
+                }
+            </ul>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <h3>You are not authorized to view this content.</h3>
+    </NotAuthorized>    
+
 </AuthorizeView>
 
 @code {
@@ -34,18 +50,16 @@
     private string? userid;
     private IList<Claim> userClaims = default!;
     private bool premiumUser = false;
+    private bool adminUser = false;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;
-     protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         user = await UserAccessor.GetRequiredUserAsync(HttpContext);
         userid = await UserManager.GetUserIdAsync(user);
         userClaims = await UserManager.GetClaimsAsync(user);
         premiumUser = user.IsPremium;
-
+        adminUser = user.IsAdmin;
     }
-
-
-
 }
